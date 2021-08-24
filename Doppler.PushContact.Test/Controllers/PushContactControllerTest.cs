@@ -559,7 +559,7 @@ namespace Doppler.PushContact.Test.Controllers
             // Arrange
             var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact")
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -579,7 +579,7 @@ namespace Doppler.PushContact.Test.Controllers
             // Arrange
             var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact")
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -601,7 +601,7 @@ namespace Doppler.PushContact.Test.Controllers
             // Arrange
             var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact")
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -620,7 +620,7 @@ namespace Doppler.PushContact.Test.Controllers
             // Arrange
             var client = _factory.CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact");
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact");
 
             // Act
             var response = await client.SendAsync(request);
@@ -651,7 +651,7 @@ namespace Doppler.PushContact.Test.Controllers
 
             }).CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact")
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact")
             {
                 Headers = { { "Authorization", $"Bearer {TOKEN_SUPERUSER_EXPIRE_20330518}" } },
                 Content = JsonContent.Create(fixture.Create<IEnumerable<PushContactHistoryEvent>>())
@@ -686,7 +686,7 @@ namespace Doppler.PushContact.Test.Controllers
 
             }).CreateClient(new WebApplicationFactoryClientOptions());
 
-            var request = new HttpRequestMessage(HttpMethod.Put, "pushcontact")
+            var request = new HttpRequestMessage(HttpMethod.Patch, "pushcontact")
             {
                 Headers = { { "Authorization", $"Bearer {TOKEN_SUPERUSER_EXPIRE_20330518}" } },
                 Content = JsonContent.Create(fixture.Create<IEnumerable<PushContactHistoryEvent>>())
