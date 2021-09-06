@@ -349,7 +349,7 @@ namespace Doppler.PushContact.Test.Controllers
             var fixture = new Fixture();
             var domain = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -372,7 +372,7 @@ namespace Doppler.PushContact.Test.Controllers
             var fixture = new Fixture();
             var domain = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -397,7 +397,7 @@ namespace Doppler.PushContact.Test.Controllers
             var fixture = new Fixture();
             var domain = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}")
             {
                 Headers = { { "Authorization", $"Bearer {token}" } }
             };
@@ -419,7 +419,7 @@ namespace Doppler.PushContact.Test.Controllers
             var fixture = new Fixture();
             var domain = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}");
 
             // Act
             var response = await client.SendAsync(request);
@@ -455,7 +455,7 @@ namespace Doppler.PushContact.Test.Controllers
             var domain = fixture.Create<string>();
             var email = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}&email={email}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}?email={email}")
             {
                 Headers = { { "Authorization", $"Bearer {TOKEN_SUPERUSER_EXPIRE_20330518}" } }
             };
@@ -510,7 +510,7 @@ namespace Doppler.PushContact.Test.Controllers
             var domain = fixture.Create<string>();
             var email = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}&email={email}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}?email={email}")
             {
                 Headers = { { "Authorization", $"Bearer {TOKEN_SUPERUSER_EXPIRE_20330518}" } }
             };
@@ -549,7 +549,7 @@ namespace Doppler.PushContact.Test.Controllers
             var domain = fixture.Create<string>();
             var email = fixture.Create<string>();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts?domain={domain}&email={email}")
+            var request = new HttpRequestMessage(HttpMethod.Get, $"push-contacts/{domain}?email={email}")
             {
                 Headers = { { "Authorization", $"Bearer {TOKEN_SUPERUSER_EXPIRE_20330518}" } }
             };

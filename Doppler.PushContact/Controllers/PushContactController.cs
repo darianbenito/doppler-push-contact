@@ -32,8 +32,8 @@ namespace Doppler.PushContact.Controllers
         }
 
         [HttpGet]
-        [Route("push-contacts")]
-        public async Task<IActionResult> GetBy([FromQuery] string domain, [FromQuery] string email)
+        [Route("push-contacts/{domain}")]
+        public async Task<IActionResult> GetBy([FromRoute] string domain, [FromQuery] string email)
         {
             var pushContactFilter = new PushContactFilter(domain, email);
 
