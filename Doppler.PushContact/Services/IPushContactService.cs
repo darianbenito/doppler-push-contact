@@ -15,5 +15,7 @@ namespace Doppler.PushContact.Services
         Task<long> DeleteByDeviceTokenAsync(IEnumerable<string> deviceTokens);
 
         Task AddHistoryEventsAsync(IEnumerable<PushContactHistoryEvent> pushContactHistoryEvents);
+
+        Task<IEnumerable<string>> GetAllDeviceTokensByDomainAsync(string domain);
     }
 }

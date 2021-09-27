@@ -231,6 +231,35 @@ with {nameof(deviceToken)} {deviceToken}. {PushContactDocumentProps.EmailPropNam
             }
         }
 
+        public async Task<IEnumerable<string>> GetAllDeviceTokensByDomainAsync(string domain)
+        {
+            var FilterBuilder = Builders<BsonDocument>.Filter;
+
+            var filter = FilterBuilder.Eq(PushContactDocumentProps.DomainPropName, domain)
+                        & !FilterBuilder.Eq(PushContactDocumentProps.DeletedPropName, true);
+
+            var options = new FindOptions<BsonDocument>
+            {
+                Projection = Builders<BsonDocument>.Projection
+                            .Include(PushContactDocumentProps.DeviceTokenPropName)
+                            .Exclude(PushContactDocumentProps.IdPropName)
+            };
+
+            try
+            {
+                var pushContactsFiltered = await (await PushContacts.FindAsync(filter, options)).ToListAsync();
+
+                return pushContactsFiltered
+                    .Select(x => x.GetValue(PushContactDocumentProps.DeviceTokenPropName, null)?.AsString);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting {nameof(PushContactModel)}s by {nameof(domain)} {domain}");
+
+                throw;
+            }
+        }
+
         private IMongoCollection<BsonDocument> PushContacts
         {
             get
