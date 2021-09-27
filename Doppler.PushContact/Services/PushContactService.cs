@@ -206,6 +206,7 @@ with {nameof(deviceToken)} {deviceToken}. {PushContactDocumentProps.EmailPropNam
                 .Select(x =>
                 {
                     var historyEvent = new BsonDocument {
+                        { PushContactDocumentProps.HistoryEvents_MessageIdPropName, new BsonBinaryData(x.MessageId, GuidRepresentation.Standard) },
                         { PushContactDocumentProps.HistoryEvents_SentSuccessPropName, x.SentSuccess },
                         { PushContactDocumentProps.HistoryEvents_EventDatePropName, x.EventDate },
                         { PushContactDocumentProps.HistoryEvents_InsertedDatePropName, now },

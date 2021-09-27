@@ -16,6 +16,8 @@ namespace Doppler.PushContact.Services
 
         public const string HistoryEventsPropName = "history_events";
 
+        public const string HistoryEvents_MessageIdPropName = "message_id";
+
         public const string HistoryEvents_SentSuccessPropName = "sent_success";
 
         public const string HistoryEvents_EventDatePropName = "event_date";
