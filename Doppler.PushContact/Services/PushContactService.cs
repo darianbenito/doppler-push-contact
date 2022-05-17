@@ -266,6 +266,60 @@ with {nameof(deviceToken)} {deviceToken}. {PushContactDocumentProps.EmailPropNam
             }
         }
 
+        public async Task<IEnumerable<PushContactHistoryEvent>> GetHistoryEventsAsync(string domain, Guid messageId)
+        {
+            if (string.IsNullOrEmpty(domain))
+            {
+                throw new ArgumentException($"'{nameof(domain)}' cannot be null or empty.", nameof(domain));
+            }
+
+            var filterBuilder = Builders<BsonDocument>.Filter;
+
+            var filter = filterBuilder.Eq(PushContactDocumentProps.DomainPropName, domain);
+
+            filter &= filterBuilder.ElemMatch<BsonDocument>(
+                PushContactDocumentProps.HistoryEventsPropName,
+                new BsonDocument { { PushContactDocumentProps.HistoryEvents_MessageIdPropName, new BsonBinaryData(messageId, GuidRepresentation.Standard) } });
+
+            var projection = Builders<BsonDocument>.Projection.ElemMatch<BsonDocument>(
+                PushContactDocumentProps.HistoryEventsPropName,
+                new BsonDocument { { PushContactDocumentProps.HistoryEvents_MessageIdPropName, new BsonBinaryData(messageId, GuidRepresentation.Standard) } })
+                .Include(PushContactDocumentProps.DeviceTokenPropName);
+
+            var findOptions = new FindOptions<BsonDocument> { Projection = projection };
+
+            try
+            {
+                var pushContactsFiltered = await (await PushContacts.FindAsync(filter, findOptions)).ToListAsync();
+
+                var historyEvents = new List<PushContactHistoryEvent>();
+
+                foreach (var pushContact in pushContactsFiltered)
+                {
+                    historyEvents
+                    .AddRange(pushContact.GetValue(PushContactDocumentProps.HistoryEventsPropName)
+                    .AsBsonArray
+                    .Select(x =>
+                    new PushContactHistoryEvent
+                    {
+                        DeviceToken = pushContact.GetValue(PushContactDocumentProps.DeviceTokenPropName).AsString,
+                        SentSuccess = x.AsBsonDocument.GetValue(PushContactDocumentProps.HistoryEvents_SentSuccessPropName).AsBoolean,
+                        EventDate = x.AsBsonDocument.GetValue(PushContactDocumentProps.HistoryEvents_EventDatePropName).ToUniversalTime(),
+                        Details = x.AsBsonDocument.GetValue(PushContactDocumentProps.HistoryEvents_DetailsPropName) == BsonNull.Value ? null : x.AsBsonDocument.GetValue(PushContactDocumentProps.HistoryEvents_DetailsPropName).AsString,
+                        MessageId = x.AsBsonDocument.GetValue(PushContactDocumentProps.HistoryEvents_MessageIdPropName).AsGuid
+                    }));
+                }
+
+                return historyEvents;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting {nameof(PushContactHistoryEvent)}s");
+
+                throw;
+            }
+        }
+
         private IMongoCollection<BsonDocument> PushContacts
         {
             get
