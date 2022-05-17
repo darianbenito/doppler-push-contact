@@ -106,6 +106,17 @@ namespace Doppler.PushContact.Controllers
 
             return Ok(new MessageResult(messageId));
         }
+
+        [HttpGet]
+        [Route("push-contacts/{domain}/messages/{messageId}/details")]
+        public async Task<IActionResult> GetDetailedMessageResult([FromRoute] string domain, [FromRoute] Guid messageId)
+        {
+            var historyEvents = await _pushContactService.GetHistoryEventsAsync(domain, messageId);
+
+            return Ok(new DetailedMessageResult(
+                messageId,
+                historyEvents.Count(),
+                historyEvents.Count(x => x.SentSuccess)));
         }
     }
 }
