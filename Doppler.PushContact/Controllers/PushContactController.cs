@@ -104,10 +104,8 @@ namespace Doppler.PushContact.Controllers
             // TODO: run all steps asynchronous
             // and response an 202-accepted with the message id instead
 
-            return Ok(new MessageResult
-            {
-                MessageId = messageId
-            });
+            return Ok(new MessageResult(messageId));
+        }
         }
     }
 }
