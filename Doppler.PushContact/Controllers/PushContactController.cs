@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Doppler.PushContact.Services.Messages;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Doppler.PushContact.Controllers
 {
@@ -19,12 +20,14 @@ namespace Doppler.PushContact.Controllers
         private readonly IPushContactService _pushContactService;
         private readonly IMessageSender _messageSender;
         private readonly IMessageRepository _messageRepository;
+        private readonly IServiceProvider _serviceProvider;
 
-        public PushContactController(IPushContactService pushContactService, IMessageSender messageSender, IMessageRepository messageRepository)
+        public PushContactController(IPushContactService pushContactService, IMessageSender messageSender, IMessageRepository messageRepository, IServiceProvider serviceProvider)
         {
             _pushContactService = pushContactService;
             _messageSender = messageSender;
             _messageRepository = messageRepository;
+            _serviceProvider = serviceProvider;
         }
 
         [AllowAnonymous]
@@ -130,6 +133,31 @@ namespace Doppler.PushContact.Controllers
                 messageDetails.Sent,
                 messageDetails.Delivered,
                 messageDetails.NotDelivered
+            });
+        }
+
+        [HttpPost]
+        [Route("push-contacts/message-and-forget")]
+        public async Task<IActionResult> MessageAndForget([FromRoute] string domain, [FromBody] Message message)
+        {
+            var messageId = Guid.NewGuid();
+
+            _ = Task.Run(async () =>
+            {
+                await using (var serviceScope = _serviceProvider.CreateAsyncScope())
+                {
+                    // Get the necessary services here
+                    var pushContactService = serviceScope.ServiceProvider.GetRequiredService<IPushContactService>();
+                    var messageSender = serviceScope.ServiceProvider.GetRequiredService<IMessageSender>();
+                    var messageRepository = serviceScope.ServiceProvider.GetRequiredService<IMessageRepository>();
+
+                    // Send message logic here
+                }
+            });
+
+            return Ok(new MessageResult
+            {
+                MessageId = messageId
             });
         }
     }
